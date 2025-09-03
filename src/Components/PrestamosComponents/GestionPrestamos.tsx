@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { fetchLibros } from "../../services/bookService";
-import { crearUsuario, registrarPrestamo, listarPrestamos, devolverPrestamo } from "../../services/prestamoService";
+import {
+  crearUsuario,
+  registrarPrestamo,
+  listarPrestamos,
+  devolverPrestamo,
+} from "../../services/prestamoService";
+import "./GestionPrestamo.css";
 
 interface Libro {
   id: number;
@@ -65,7 +71,7 @@ const GestionPrestamos: React.FC = () => {
 
     try {
       const usuarioCreado = await crearUsuario(usuario);
-      await registrarPrestamo(selectedLibroId, usuarioCreado.id);
+      await registrarPrestamo(selectedLibroId, usuarioCreado.nombre);
       setSuccess("Préstamo registrado exitosamente");
 
       setUsuario({ nombre: "", email: "" });
@@ -77,7 +83,6 @@ const GestionPrestamos: React.FC = () => {
       setError("Error al registrar el préstamo. Intenta nuevamente.");
     }
   };
-
   const handleDevolver = async (prestamoId: number) => {
     try {
       await devolverPrestamo(prestamoId);
@@ -90,16 +95,24 @@ const GestionPrestamos: React.FC = () => {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("es-CO"); // Formato dd/mm/yyyy
+    return date.toLocaleDateString("es-CO");
+  };
+
+  const isVencido = (fechaDevolucion: string) => {
+    const hoy = new Date();
+    return new Date(fechaDevolucion) < hoy;
   };
 
   return (
-    <div>
-      <h2>Registrar Préstamo</h2>
+    <div className="prestamos-container">
+      <div className="prestamos-header">
+        <h2>Registrar Préstamo</h2>
+      </div>
+
       {error && <div className="error-message">{error}</div>}
       {success && <div className="success-message">{success}</div>}
 
-      <form onSubmit={handleSubmit}>
+      <form className="prestamos-form" onSubmit={handleSubmit}>
         <div>
           <label>Nombre del Usuario:</label>
           <input
@@ -139,20 +152,55 @@ const GestionPrestamos: React.FC = () => {
       </form>
 
       <h3>Préstamos Activos</h3>
-      <ul>
-        {prestamos.map((prestamo) => (
-          <li key={prestamo.id}>
-            <strong>{prestamo.usuario.nombre}</strong> tiene el libro "<em>{prestamo.libro.titulo}</em>"
-            <br />
-            Fecha de Préstamo: {formatDate(prestamo.fechaPrestamo)} <br />
-            Fecha de Devolución: {formatDate(prestamo.fechaDevolucion)} <br />
-            Devuelto: {prestamo.devuelto ? "Sí" : "No"} <br />
-            {!prestamo.devuelto && (
-              <button onClick={() => handleDevolver(prestamo.id)}>Devolver</button>
+      <div className="prestamos-table-wrapper">
+        <table className="prestamos-table">
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Libro</th>
+              <th>Fecha Préstamo</th>
+              <th>Fecha Devolución</th>
+              <th>Devuelto</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {prestamos.length === 0 && (
+              <tr>
+                <td colSpan={6} className="empty-message">
+                  No hay préstamos registrados
+                </td>
+              </tr>
             )}
-          </li>
-        ))}
-      </ul>
+            {prestamos.map((prestamo) => (
+              <tr
+                key={prestamo.id}
+                className={
+                  !prestamo.devuelto && isVencido(prestamo.fechaDevolucion)
+                    ? "prestamo-vencido"
+                    : ""
+                }
+              >
+                <td>{prestamo.usuario.nombre}</td>
+                <td>{prestamo.libro.titulo}</td>
+                <td>{formatDate(prestamo.fechaPrestamo)}</td>
+                <td>{formatDate(prestamo.fechaDevolucion)}</td>
+                <td>{prestamo.devuelto ? "Sí" : "No"}</td>
+                <td>
+                  {!prestamo.devuelto && (
+                    <button
+                      className="action-btn devolver"
+                      onClick={() => handleDevolver(prestamo.id)}
+                    >
+                      Devolver
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import { Header } from "../layout/Header";
 import { BookPage } from "../Pages/BookPage";
-import GestionPrestamos from "../Components/PrestamosComponents/GestionPrestamos";
+import { LoanPage } from "../Pages/LoanPage";
 
 
 export const router = createBrowserRouter([
@@ -15,6 +15,6 @@ export const router = createBrowserRouter([
     },
     {
         path:'/Prestamos',
-        element:<GestionPrestamos />
+        element:<LoanPage/>
     }
 ])
