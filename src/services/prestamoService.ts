@@ -10,10 +10,11 @@ export const crearUsuario = async (usuario: { nombre: string; email: string }) =
   return response.data;
 };
 
-export const registrarPrestamo = async (libroId: number, usuarioNombre: string) => {
-  const response = await api.post(`/prestamos/prestar/${libroId}/${usuarioNombre}`);
+export const registrarPrestamo = async (libroId: number, usuarioEmail: string) => {
+  const response = await api.post(`/prestamos/prestar/${libroId}/${usuarioEmail}`);
   return response.data;
 };
+
 export const listarPrestamos = async () => {
   const response = await api.get("/prestamos");
   return response.data;

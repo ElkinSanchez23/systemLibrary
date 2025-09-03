@@ -1,13 +1,11 @@
 import "./Navbar.css";
-import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
-  const [active, setActive] = useState("/Panel");
   const links = [
     { to: "/Panel", label: "Panel" },
-    { to: "/Gestion-libros", label: "Gestión de Libros" },
+    { to: "/", label: "Gestión de Libros" },
     { to: "/Prestamos", label: "Préstamos" },
-    { to: "/Usuarios", label: "Usuarios" },
   ];
 
   return (
@@ -18,13 +16,15 @@ const Navbar = () => {
       </div>
       <div className="nav-links">
         {links.map((link) => (
-          <button
+          <NavLink
             key={link.to}
-            className={`nav-link ${active === link.to ? "active" : ""}`}
-            onClick={() => setActive(link.to)}
+            to={link.to}
+            className={({ isActive }) =>
+              `nav-link ${isActive ? "active" : ""}`
+            }
           >
             {link.label}
-          </button>
+          </NavLink>
         ))}
       </div>
     </nav>

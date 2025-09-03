@@ -71,7 +71,9 @@ const GestionPrestamos: React.FC = () => {
 
     try {
       const usuarioCreado = await crearUsuario(usuario);
-      await registrarPrestamo(selectedLibroId, usuarioCreado.nombre);
+
+      await registrarPrestamo(selectedLibroId, usuarioCreado.email);
+
       setSuccess("Préstamo registrado exitosamente");
 
       setUsuario({ nombre: "", email: "" });
@@ -83,6 +85,7 @@ const GestionPrestamos: React.FC = () => {
       setError("Error al registrar el préstamo. Intenta nuevamente.");
     }
   };
+
   const handleDevolver = async (prestamoId: number) => {
     try {
       await devolverPrestamo(prestamoId);
@@ -106,100 +109,112 @@ const GestionPrestamos: React.FC = () => {
   return (
     <div className="prestamos-container">
       <div className="prestamos-header">
-        <h2>Registrar Préstamo</h2>
+        <h2>Gestión de Préstamos</h2>
       </div>
 
       {error && <div className="error-message">{error}</div>}
       {success && <div className="success-message">{success}</div>}
 
-      <form className="prestamos-form" onSubmit={handleSubmit}>
-        <div>
-          <label>Nombre del Usuario:</label>
-          <input
-            type="text"
-            value={usuario.nombre}
-            onChange={(e) => setUsuario({ ...usuario, nombre: e.target.value })}
-            required
-          />
-        </div>
-        <div>
-          <label>Email del Usuario:</label>
-          <input
-            type="email"
-            value={usuario.email}
-            onChange={(e) => setUsuario({ ...usuario, email: e.target.value })}
-            required
-          />
-        </div>
-        <div>
-          <label>Libro:</label>
-          <select
-            value={selectedLibroId || ""}
-            onChange={(e) => setSelectedLibroId(Number(e.target.value))}
-            required
-          >
-            <option value="" disabled>
-              Selecciona un libro
-            </option>
-            {libros.map((libro) => (
-              <option key={libro.id} value={libro.id}>
-                {libro.titulo}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button type="submit">Registrar Préstamo</button>
-      </form>
-
-      <h3>Préstamos Activos</h3>
-      <div className="prestamos-table-wrapper">
-        <table className="prestamos-table">
-          <thead>
-            <tr>
-              <th>Usuario</th>
-              <th>Libro</th>
-              <th>Fecha Préstamo</th>
-              <th>Fecha Devolución</th>
-              <th>Devuelto</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {prestamos.length === 0 && (
-              <tr>
-                <td colSpan={6} className="empty-message">
-                  No hay préstamos registrados
-                </td>
-              </tr>
-            )}
-            {prestamos.map((prestamo) => (
-              <tr
-                key={prestamo.id}
-                className={
-                  !prestamo.devuelto && isVencido(prestamo.fechaDevolucion)
-                    ? "prestamo-vencido"
-                    : ""
+      <div className="prestamos-grid">
+        <div className="prestamos-form-wrapper">
+          <h3>Registrar Préstamo</h3>
+          <form className="prestamos-form" onSubmit={handleSubmit}>
+            <div>
+              <label>Nombre del Usuario:</label>
+              <input
+                type="text"
+                value={usuario.nombre}
+                onChange={(e) =>
+                  setUsuario({ ...usuario, nombre: e.target.value })
                 }
+                required
+              />
+            </div>
+            <div>
+              <label>Email del Usuario:</label>
+              <input
+                type="email"
+                value={usuario.email}
+                onChange={(e) =>
+                  setUsuario({ ...usuario, email: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label>Libro:</label>
+              <select
+                value={selectedLibroId || ""}
+                onChange={(e) => setSelectedLibroId(Number(e.target.value))}
+                required
               >
-                <td>{prestamo.usuario.nombre}</td>
-                <td>{prestamo.libro.titulo}</td>
-                <td>{formatDate(prestamo.fechaPrestamo)}</td>
-                <td>{formatDate(prestamo.fechaDevolucion)}</td>
-                <td>{prestamo.devuelto ? "Sí" : "No"}</td>
-                <td>
-                  {!prestamo.devuelto && (
-                    <button
-                      className="action-btn devolver"
-                      onClick={() => handleDevolver(prestamo.id)}
+                <option value="" disabled>
+                  Selecciona un libro
+                </option>
+                {libros.map((libro) => (
+                  <option key={libro.id} value={libro.id}>
+                    {libro.titulo}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button type="submit">Registrar Préstamo</button>
+          </form>
+        </div>
+
+        {/* Préstamos Activos */}
+        <div className="prestamos-activos">
+          <h3>Préstamos Activos</h3>
+          <div className="prestamos-table-wrapper">
+            <table className="prestamos-table">
+              <thead>
+                <tr>
+                  <th>Usuario</th>
+                  <th>Libro</th>
+                  <th>Préstamo</th>
+                  <th>Devolución</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {prestamos.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="empty-message">
+                      No hay préstamos registrados
+                    </td>
+                  </tr>
+                ) : (
+                  prestamos.map((prestamo) => (
+                    <tr
+                      key={prestamo.id}
+                      className={
+                        !prestamo.devuelto &&
+                        isVencido(prestamo.fechaDevolucion)
+                          ? "prestamo-vencido"
+                          : ""
+                      }
                     >
-                      Devolver
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                      <td>{prestamo.usuario.nombre}</td>
+                      <td>{prestamo.libro.titulo}</td>
+                      <td>{formatDate(prestamo.fechaPrestamo)}</td>
+                      <td>{formatDate(prestamo.fechaDevolucion)}</td>
+                      <td>
+                        {!prestamo.devuelto && (
+                          <button
+                            className="action-btn devolver"
+                            onClick={() => handleDevolver(prestamo.id)}
+                          >
+                            Devolver
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );

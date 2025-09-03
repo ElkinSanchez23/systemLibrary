@@ -1,16 +1,16 @@
 import { createBrowserRouter } from "react-router";
-import { Header } from "../layout/Header";
 import { BookPage } from "../Pages/BookPage";
 import { LoanPage } from "../Pages/LoanPage";
+import { StatsPage } from "../Pages/StatsPage";
 
 
 export const router = createBrowserRouter([
     {
-        path: '/',
-        element: <Header />
+        path: '/Panel',
+        element: <StatsPage />
     },
     {
-        path:'/Gestion-libros',
+        path:'/',
         element: <BookPage />
     },
     {
