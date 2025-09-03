@@ -1,0 +1,100 @@
+.form-container {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 300px;
+  height: calc(100vh - 80px);
+  background-color: #0f172a;
+  color: #ffffff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.form-container h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-container label {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+  text-align: left;
+  padding-left: 15px;
+}
+
+.form-container input,
+.form-container select {
+  width: 90%;
+  max-width: 220px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #30363d;
+  background-color: #161b22;
+  color: #c9d1d9;
+  font-size: 16px;
+  outline: none;
+  transition: border 0.2s;
+  margin: 0 auto;
+  display: block;
+}
+
+.form-container input:focus,
+.form-container select:focus {
+  border-color: #238636;
+}
+
+.form-container button {
+  width: 90%;
+  max-width: 220px;
+  background-color: #2ea043;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 15px auto 0 auto;
+  display: block;
+  transition: background-color 0.2s ease;
+}
+
+.form-container button:hover {
+  background-color: #24833a;
+}
+
+.error-message {
+  color: #ff6b6b;
+  font-size: 12px;
+  margin-top: 5px;
+  text-align: center;
+  display: block;
+}
+
+.form-container input.error,
+.form-container select.error {
+  border-color: #ff6b6b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    top: 0;
+  }
+}

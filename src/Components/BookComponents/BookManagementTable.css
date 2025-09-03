@@ -1,0 +1,243 @@
+/* Estilos generales para el contenido principal */
+.main-content {
+  margin-left: 300px; 
+  padding: 40px;
+  background-color: #1e293b;
+  min-height: 100vh;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  transition: margin-left 0.3s ease;
+}
+
+/* Estilos para el encabezado de la tabla */
+.content-header {
+  margin-bottom: 30px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+/* Estilos para la barra de búsqueda */
+.search-wrapper {
+  max-width: 400px;
+}
+
+.search-input {
+  width: 100%;
+  background-color: #334155;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  padding: 12px 12px 12px 40px;
+  color: #e2e8f0;
+  font-size: 14px;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background-color: #475569;
+}
+
+.search-input::placeholder {
+  color: #94a3b8;
+}
+
+/* Estilos para la tabla */
+.table-wrapper {
+  background-color: #334155;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.books-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; 
+}
+
+.books-table thead {
+  background-color: #475569;
+}
+
+.books-table th {
+  padding: 16px 20px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #64748b;
+}
+
+.books-table th:nth-child(1) { width: 30%; } 
+.books-table th:nth-child(2) { width: 25%; } 
+.books-table th:nth-child(3) { width: 20%; } 
+.books-table th:nth-child(4) { width: 15%; } 
+.books-table th:nth-child(5) { width: 10%; } 
+
+.books-table tbody tr {
+  border-bottom: 1px solid #475569;
+  transition: background-color 0.15s ease;
+}
+
+.books-table tbody tr:hover {
+  background-color: #475569;
+}
+
+.books-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.books-table td {
+  padding: 16px 20px;
+  color: #e2e8f0;
+  font-size: 14px;
+}
+
+/* Estilos para los botones de estado */
+.status-btn {
+  padding: 6px 16px;
+  border-radius: 16px;
+  border: none;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.status-btn.available {
+  background-color: #10b981;
+  color: white;
+}
+
+.status-btn.available:hover {
+  background-color: #059669;
+  transform: scale(1.05); 
+}
+
+.status-btn.unavailable {
+  background-color: #f59e0b;
+  color: white;
+}
+
+.status-btn.unavailable:hover {
+  background-color: #d97706;
+  transform: scale(1.05); 
+}
+
+.action-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.action-btn.edit {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.action-btn.edit:hover {
+  background-color: #2563eb;
+  transform: scale(1.05); /* Efecto de escala al pasar el mouse */
+}
+
+.action-btn.delete {
+  background-color: #ef4444;
+  color: white;
+}
+
+.action-btn.delete:hover {
+  background-color: #dc2626;
+  transform: scale(1.05); /* Efecto de escala al pasar el mouse */
+}
+
+/* Estilos para mensajes de error y carga */
+.error-message {
+  color: #ef4444;
+  margin: 20px 0;
+}
+
+.empty-message {
+  text-align: center;
+  color: #94a3b8;
+  padding: 40px;
+  font-size: 16px;
+}
+
+/* Estilos para el pie de la tabla */
+.table-footer {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #94a3b8;
+  text-align: right;
+}
+
+/* Media Queries para Responsividad */
+@media (max-width: 1200px) {
+  .main-content {
+    margin-left: 280px;
+    padding: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 20px;
+  }
+  
+  .page-title {
+    font-size: 24px;
+  }
+  
+  .table-wrapper {
+    overflow-x: auto;
+  }
+  
+  .books-table {
+    min-width: 800px;
+  }
+  
+  .books-table th,
+  .books-table td {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 640px) {
+  .main-content {
+    padding: 15px;
+  }
+  
+  .page-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .search-wrapper {
+    max-width: 100%;
+  }
+  
+  .books-table th,
+  .books-table td {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+  
+  .status-btn {
+    font-size: 10px;
+    padding: 4px 10px;
+  }
+}
