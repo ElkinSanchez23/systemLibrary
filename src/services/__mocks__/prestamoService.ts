@@ -25,6 +25,4 @@ export const listarPrestamos = vi.fn(async () => [
   },
 ]);
 
-export const devolverPrestamo = vi.fn(async (id) => ({
-  success: true,
-}));
+
