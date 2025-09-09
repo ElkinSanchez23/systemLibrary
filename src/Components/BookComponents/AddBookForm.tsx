@@ -26,21 +26,21 @@ const AddBookForm: React.FC<AddBookFormProps> = ({ onAddBook }) => {
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value, type } = e.target;
-    
+    const { name, value } = e.target;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "select-one" ? value === "true" : value,
+      [name]: name === "disponible" ? value === "true" : value,
     }));
   };
 
   const validateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {};
-    
+
     if (!formData.titulo.trim()) {
       newErrors.titulo = "El título es requerido";
     }
-    
+
     if (!formData.autor.trim()) {
       newErrors.autor = "El autor es requerido";
     }
@@ -48,22 +48,20 @@ const AddBookForm: React.FC<AddBookFormProps> = ({ onAddBook }) => {
     if (!formData.genero.trim()) {
       newErrors.genero = "El género es requerido";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     console.log("📚 Libro añadido:", formData);
     onAddBook(formData);
-    
-    // Limpiar formulario
     setFormData({
       titulo: "",
       autor: "",
@@ -88,7 +86,9 @@ const AddBookForm: React.FC<AddBookFormProps> = ({ onAddBook }) => {
           className={errors.titulo ? "error" : ""}
           required
         />
-        {errors.titulo && <span className="error-message">{errors.titulo}</span>}
+        {errors.titulo && (
+          <span className="error-message">{errors.titulo}</span>
+        )}
       </div>
 
       <div className="form-group">
@@ -116,7 +116,9 @@ const AddBookForm: React.FC<AddBookFormProps> = ({ onAddBook }) => {
           className={errors.genero ? "error" : ""}
           required
         />
-        {errors.genero && <span className="error-message">{errors.genero}</span>}
+        {errors.genero && (
+          <span className="error-message">{errors.genero}</span>
+        )}
       </div>
 
       <div className="form-group">

@@ -17,7 +17,7 @@ export const BookPage = () => {
     setLoading(true);
     try {
         
-      await axios.post('http://localhost:8080/libros', newBook, {
+      await axios.post('https://systemlibraryback-production.up.railway.app/libros', newBook, {
         headers: {
           'Content-Type': 'application/json',
         },
