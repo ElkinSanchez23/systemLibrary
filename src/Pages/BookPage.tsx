@@ -16,13 +16,14 @@ export const BookPage = () => {
   const handleAddBook = async (newBook: BookFormData) => {
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:8080/libros', newBook, {
+        
+      await axios.post('http://localhost:8080/libros', newBook, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      console.log('✅ Libro agregado exitosamente:', response.data);
+
       alert('Libro agregado exitosamente');
 
       handleRefreshTable();

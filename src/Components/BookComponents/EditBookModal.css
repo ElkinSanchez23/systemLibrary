@@ -154,7 +154,7 @@
   cursor: not-allowed;
 }
 
-/* Responsive */
+
 @media (max-width: 600px) {
   .modal-content {
     padding: 20px;

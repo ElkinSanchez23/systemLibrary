@@ -35,28 +35,22 @@ const GestionPrestamos: React.FC = () => {
   const [selectedLibroId, setSelectedLibroId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const loadLibros = async () => {
+    const loadData = async () => {
       try {
-        const librosData = await fetchLibros();
+        const [librosData, prestamosData] = await Promise.all([
+          fetchLibros(),
+          listarPrestamos(),
+        ]);
         setLibros(librosData);
-      } catch {
-        setError("Error al cargar los libros.");
-      }
-    };
-
-    const loadPrestamos = async () => {
-      try {
-        const prestamosData = await listarPrestamos();
         setPrestamos(prestamosData);
       } catch {
-        setError("Error al cargar los préstamos.");
+        setError("Error al cargar los datos iniciales.");
       }
     };
-
-    loadLibros();
-    loadPrestamos();
+    loadData();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -70,19 +64,20 @@ const GestionPrestamos: React.FC = () => {
     }
 
     try {
+      setLoading(true);
       const usuarioCreado = await crearUsuario(usuario);
-
       await registrarPrestamo(selectedLibroId, usuarioCreado.email);
 
-      setSuccess("Préstamo registrado exitosamente");
-
+      setSuccess("✅ Préstamo registrado exitosamente");
       setUsuario({ nombre: "", email: "" });
       setSelectedLibroId(null);
 
       const prestamosData = await listarPrestamos();
       setPrestamos(prestamosData);
     } catch {
-      setError("Error al registrar el préstamo. Intenta nuevamente.");
+      setError("❌ Error al registrar el préstamo. Intenta nuevamente.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -116,12 +111,14 @@ const GestionPrestamos: React.FC = () => {
       {success && <div className="success-message">{success}</div>}
 
       <div className="prestamos-grid">
+        {/* Formulario */}
         <div className="prestamos-form-wrapper">
-          <h3>Registrar Préstamo</h3>
+          <h3>Formulario de Préstamo</h3>
           <form className="prestamos-form" onSubmit={handleSubmit}>
             <div>
-              <label>Nombre del Usuario:</label>
+              <label htmlFor="nombre">Nombre del Usuario:</label>
               <input
+                id="nombre"
                 type="text"
                 value={usuario.nombre}
                 onChange={(e) =>
@@ -131,8 +128,9 @@ const GestionPrestamos: React.FC = () => {
               />
             </div>
             <div>
-              <label>Email del Usuario:</label>
+              <label htmlFor="email">Email del Usuario:</label>
               <input
+                id="email"
                 type="email"
                 value={usuario.email}
                 onChange={(e) =>
@@ -142,8 +140,9 @@ const GestionPrestamos: React.FC = () => {
               />
             </div>
             <div>
-              <label>Libro:</label>
+              <label htmlFor="libro">Libro:</label>
               <select
+                id="libro"
                 value={selectedLibroId || ""}
                 onChange={(e) => setSelectedLibroId(Number(e.target.value))}
                 required
@@ -158,7 +157,10 @@ const GestionPrestamos: React.FC = () => {
                 ))}
               </select>
             </div>
-            <button type="submit">Registrar Préstamo</button>
+
+            <button type="submit" disabled={loading}>
+              {loading ? "Registrando..." : "Registrar Préstamo"}
+            </button>
           </form>
         </div>
 
